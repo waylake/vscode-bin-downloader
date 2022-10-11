@@ -6,13 +6,14 @@ LAST_URL = "/server-linux-x64/stable"
 
 
 def download_vscode_bin(commit_id):
-    dirs = [".vscode-server", f".vscode-server/{commit_id}"]
+    dirs = [".vscode-server", '.vscode-server/bin', f".vscode-server/bin/{commit_id}"]
+
     for dir in dirs:
         if not os.path.exists(dir):
             os.mkdir(dir)
 
     url = BASE_URL + commit_id + LAST_URL
-    path = f".vscode-server/{commit_id}/"
+    path = f".vscode-server/{commit_id}/bin/"
     file_name = "vscode-server.tar.gz"
     wget.download(url=url, out=path + file_name)
 
