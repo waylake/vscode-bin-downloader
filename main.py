@@ -1,21 +1,35 @@
 import wget
 import os
+from pathlib import Path
 
 BASE_URL = "https://update.code.visualstudio.com/commit:"
 LAST_URL = "/server-linux-x64/stable"
 
+commit_id = '64bbfbf67ada9953918d72e1df2f4d8e537d340e'
 
-def download_vscode_bin(commit_id):
-    dirs = [".vscode-server", '.vscode-server/bin', f".vscode-server/bin/{commit_id}"]
+dirs = [".vscode-server", '.vscode-server/bin']
+# home_dir = str(Path.home())
+home_dir = os.getcwd()
 
-    for dir in dirs:
-        if not os.path.exists(dir):
-            os.mkdir(dir)
-
-    url = BASE_URL + commit_id + LAST_URL
-    path = f".vscode-server/{commit_id}/bin/"
-    file_name = "vscode-server.tar.gz"
-    wget.download(url=url, out=path + file_name)
+for dir_ in dirs:
+    if not os.path.exists(home_dir + "/" + dir_):
+        os.mkdir(home_dir + "/" + dir_)
 
 
-download_vscode_bin("64bbfbf67ada9953918d72e1df2f4d8e537d340e")
+def rename_folder(old, new):
+    os.rename(old, new)
+
+
+def un_tar(file):
+    os.system(f"tar -xzf {file} -C {home_dir}/.vscode-server/bin/{commit_id}")
+
+
+def download_vscode_bin(id_):
+    url = BASE_URL + id_ + LAST_URL
+    wget.download(url, out=home_dir + "/.vscode-server/bin/" + id_ + ".tar.gz")
+
+
+
+if __name__ == "__main__":
+    download_vscode_bin(commit_id)
+    un_tar(home_dir + f'/.vscode-server/bin/vscode-server-{commit_id}.tar.gz')
